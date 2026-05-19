@@ -23,14 +23,18 @@
   #
   # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
+    age
     kind
     iperf3
     git
     gnumake
     go
+    neovim
     podman
     podman-compose
     python3
+    sops
+    ssh-to-age
     watch
     wget
   ];
@@ -74,7 +78,6 @@
       "bitwarden"
       "caffeine"
       "calibre"
-      "firefox"
       "grandperspective"
       "iina"
       "intellij-idea"
