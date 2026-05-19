@@ -78,6 +78,7 @@
       "bitwarden"
       "caffeine"
       "calibre"
+      "discord"
       "grandperspective"
       "iina"
       "intellij-idea"
