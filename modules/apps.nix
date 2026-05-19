@@ -1,5 +1,10 @@
-{ pkgs, ...}: {
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+{
   ##########################################################################
   #
   #  Install all apps and packages here.
@@ -7,7 +12,7 @@
   #  NOTE: Your can find all available options in:
   #    https://daiderd.com/nix-darwin/manual/index.html
   #
-  # TODO Fell free to modify this file to fit your needs.
+  # TODO Feel free to modify this file to fit your needs.
   #
   ##########################################################################
 
@@ -18,37 +23,73 @@
   #
   # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
+    kind
+    iperf3
     git
+    gnumake
+    go
+    podman
+    podman-compose
+    python3
     watch
-    
+    wget
   ];
+
+  services.prometheus.exporters.node = {
+    enable = true;
+    enabledCollectors = [
+      "cpu"
+      "diskstats"
+      "meminfo"
+      "netdev"
+      "systemd"
+    ];
+    port = 9100;
+  };
+  users.users._prometheus-node-exporter.home = lib.mkForce "/private/var/lib/prometheus-node-exporter";
+
+  services.tailscale.enable = true;
 
   #
   # The apps installed by homebrew are not managed by nix, and not reproducible!
   # But on macOS, homebrew has a much larger selection of apps than nixpkgs, especially for GUI apps!
   homebrew = {
-    enable = false;
+    enable = true;
 
     onActivation = {
-      autoUpdate = false;
+      autoUpdate = true;
       # 'zap': uninstalls all formulae(and related files) not listed here.
-      # cleanup = "zap";
+      cleanup = "zap";
     };
 
-    taps = [
-      "homebrew/services"
-    ];
+    taps = [ ];
 
     # `brew install`
-    # TODO Feel free to add your favorite apps here.
-    brews = [
-      # "aria2"  # download tool
-    ];
+    brews = [ ];
 
     # `brew install --cask`
-    # TODO Feel free to add your favorite apps here.
     casks = [
-      # "google-chrome"
+      "alfred"
+      "antigravity"
+      "bitwarden"
+      "caffeine"
+      "calibre"
+      "firefox"
+      "grandperspective"
+      "iina"
+      "intellij-idea"
+      "iterm2"
+      "libreoffice"
+      "qbittorrent"
+      "reaper"
+      "rectangle"
+      "spotify"
+      "stats"
+      "tailscale-app"
+      "tidal"
+      "tinymediamanager"
+      "whatsapp"
+      "zoom"
     ];
   };
 }
