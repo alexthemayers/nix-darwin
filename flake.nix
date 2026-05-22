@@ -20,10 +20,10 @@
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
   # Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.
   inputs = {
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -40,26 +40,55 @@
       ...
     }:
     let
-      username = "alex";
-      system = "aarch64-darwin"; # aarch64-darwin or x86_64-darwin
-      hostname = "m3pro";
-
-      specialArgs = inputs // {
-        inherit username hostname;
-      };
+      supportedSystems = [
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      mkDarwinHost =
+        {
+          hostname,
+          username,
+          system ? "aarch64-darwin",
+          modules,
+        }:
+        darwin.lib.darwinSystem {
+          inherit system modules;
+          specialArgs = inputs // {
+            inherit username hostname;
+          };
+        };
     in
     {
-      darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
-        inherit system specialArgs;
-        modules = [
-          ./modules/nix-core.nix
-          ./modules/system.nix
-          ./modules/apps.nix
-
-          ./modules/host-users.nix
-        ];
+      darwinConfigurations = {
+        "m3pro" = mkDarwinHost {
+          hostname = "m3pro";
+          username = "alex";
+          system = "aarch64-darwin";
+          # Modules defined specific to this host
+          modules = [
+            ./modules/nix-core.nix
+            ./modules/system.nix
+            ./modules/apps.nix
+            ./modules/host-users.nix
+            ./hosts/m3pro/apps.nix
+          ];
+        };
+        "work" = mkDarwinHost {
+          hostname = "MBAM3-AlexM";
+          username = "alexmayers";
+          system = "aarch64-darwin";
+          # Modules defined specific to this host
+          modules = [
+            ./modules/nix-core.nix
+            ./modules/system.nix
+            ./modules/apps.nix
+            ./modules/host-users.nix
+            ./hosts/work/apps.nix
+          ];
+        };
       };
       # nix code formatter
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
     };
 }

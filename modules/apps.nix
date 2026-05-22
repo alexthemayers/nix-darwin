@@ -23,7 +23,6 @@
   #
   # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
-    age
     kind
     iperf3
     git
@@ -33,26 +32,9 @@
     podman
     podman-compose
     python3
-    sops
-    ssh-to-age
     watch
     wget
   ];
-
-  services.prometheus.exporters.node = {
-    enable = true;
-    enabledCollectors = [
-      "cpu"
-      "diskstats"
-      "meminfo"
-      "netdev"
-      "systemd"
-    ];
-    port = 9100;
-  };
-  users.users._prometheus-node-exporter.home = lib.mkForce "/private/var/lib/prometheus-node-exporter";
-
-  services.tailscale.enable = true;
 
   #
   # The apps installed by homebrew are not managed by nix, and not reproducible!
@@ -77,23 +59,12 @@
       "antigravity"
       "bitwarden"
       "caffeine"
-      "calibre"
-      "discord"
       "grandperspective"
-      "iina"
       "intellij-idea"
       "iterm2"
-      "libreoffice"
-      "qbittorrent"
-      "reaper"
       "rectangle"
       "spotify"
       "stats"
-      "tailscale-app"
-      "tidal"
-      "tinymediamanager"
-      "whatsapp"
-      "zoom"
     ];
   };
 }
