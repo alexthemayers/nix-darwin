@@ -10,6 +10,8 @@ deploy-work:
 
 	sudo -E ./result/sw/bin/darwin-rebuild switch --flake .#work
 
+lint: 
+	nix flake check --all-systems
 
 fmt:
 	nix fmt
