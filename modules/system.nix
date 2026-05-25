@@ -42,15 +42,13 @@
         showDesktopGestureEnabled = true;
         showhidden = true;
         showLaunchpadGestureEnabled = false;
-        showMissionControlGestureEnabled = false;
+        showMissionControlGestureEnabled = true;
         slow-motion-allowed = false;
         static-only = true;
         tilesize = 16;
       };
       finder = {
-
         _FXEnableColumnAutoSizing = false;
-
         _FXShowPosixPathInTitle = false;
         _FXSortFoldersFirst = false;
         _FXSortFoldersFirstOnDesktop = false;
@@ -64,7 +62,6 @@
         NewWindowTarget = "Home"; # one of "Computer", "OS volume", "Home", "Desktop", "Documents", "Recents", "iCloud Drive", "Other"
         QuitMenuItem = true;
         ShowExternalHardDrivesOnDesktop = true;
-
         ShowHardDrivesOnDesktop = true;
         ShowMountedServersOnDesktop = true;
         ShowPathbar = true;
@@ -82,8 +79,6 @@
         NSDocumentSaveNewDocumentsToCloud = false;
       };
       SoftwareUpdate.AutomaticallyInstallMacOSUpdates = false;
-      # other macOS's defaults configuration.
-      # ......
     };
     keyboard = {
       enableKeyMapping = true;
@@ -105,17 +100,39 @@
     enableAutosuggestions = true;
     enableBashCompletion = true;
     enableCompletion = true;
-    #    enableFastSyntaxHighlighting = true;
     enableFzfCompletion = true;
     enableSyntaxHighlighting = true;
     enableGlobalCompInit = true;
     interactiveShellInit = ''
-      bindkey -v
+      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
     '';
+    promptInit = ''
+      # Initialize completion system with caching for speed
+      autoload -Uz compinit
+      compinit -C
+
+      # Enable menu-style selection for completions
+      zstyle ':completion:*' menu select
+      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+
+      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+      # Initialization code that may require console input (password prompts, [y/n]
+      # confirmations, etc.) must go above this block; everything else may go below.
+      # double single quotes ('\') to escape the dollar char
+      if [[ -r "''${XDG_CACHE_HOME:-''$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+        source "''${XDG_CACHE_HOME:-''$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+      fi
+    '';
+
   };
   programs.direnv = {
     enable = true;
   };
-
   programs.nix-index.enable = true;
+  environment.systemPackages = with pkgs; [
+    zsh-completions
+    zsh-powerlevel10k
+    zsh-vi-mode
+  ];
+
 }
