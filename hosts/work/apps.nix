@@ -6,5 +6,6 @@
 }:
 {
   homebrew.casks = [
+    "google-chrome"
   ];
 }

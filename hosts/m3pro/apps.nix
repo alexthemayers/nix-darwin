@@ -28,6 +28,7 @@
   homebrew.casks = [
     "calibre"
     "discord"
+    "firefox"
     "iina"
     "libreoffice"
     "qbittorrent"
