@@ -29,6 +29,7 @@
     "calibre"
     "discord"
     "firefox"
+    "balenaetcher"
     "iina"
     "libreoffice"
     "qbittorrent"
