@@ -9,6 +9,24 @@
     age
     sops
     ssh-to-age
+
+    postgresql_17
+
+    iperf3
+
+    # Go Toolchain
+    go
+    gopls
+    golangci-lint
+    gotools
+    delve
+    go-outline
+
+    gnumake
+    python3
+    zig
+    podman
+    podman-compose
   ];
   services.prometheus.exporters.node = {
     enable = true;

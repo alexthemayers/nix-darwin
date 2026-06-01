@@ -23,16 +23,13 @@
   #
   # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
+    curl
     direnv
-    kind
-    iperf3
     git
-    gnumake
-    go
+    jq
     neovim
-    podman
-    podman-compose
-    python3
+    tree
+    (lib.setPrio (-15) uutils-coreutils-noprefix)
     watch
     wget
   ];
