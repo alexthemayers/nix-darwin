@@ -49,6 +49,8 @@
       autoUpdate = true;
       # 'zap': uninstalls all formulae(and related files) not listed here.
       cleanup = "zap";
+      # https://github.com/nix-darwin/nix-darwin/issues/1787
+      extraFlags = [ "--force-cleanup" ];
     };
 
     taps = [ ];
