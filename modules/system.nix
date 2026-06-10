@@ -134,5 +134,7 @@
     zsh-powerlevel10k
     zsh-vi-mode
   ];
-
+  environment.variables = {
+    LC_ALL = "C";
+  };
 }
