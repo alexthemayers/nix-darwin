@@ -26,6 +26,7 @@
     curl
     direnv
     git
+    ghostty-bin
     jq
     neovim
     tree
@@ -63,7 +64,6 @@
       "caffeine"
       "grandperspective"
       "intellij-idea"
-      "iterm2"
       "rectangle"
       "spotify"
       "stats"
