@@ -25,6 +25,7 @@
   environment.systemPackages = with pkgs; [
     curl
     direnv
+    fastfetch
     git
     ghostty-bin
     jq
