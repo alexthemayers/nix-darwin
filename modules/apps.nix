@@ -48,6 +48,7 @@
 
     onActivation = {
       autoUpdate = true;
+      upgrade = true;
       # 'zap': uninstalls all formulae(and related files) not listed here.
       cleanup = "zap";
       # https://github.com/nix-darwin/nix-darwin/issues/1787
