@@ -47,6 +47,7 @@
     podman-compose
   ];
   homebrew.casks = [
+    "luanti"
     "google-chrome"
   ];
 }
