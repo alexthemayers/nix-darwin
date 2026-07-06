@@ -71,6 +71,7 @@
       "rectangle"
       "spotify"
       "stats"
+      "visual-studio-code"
     ];
   };
 }
