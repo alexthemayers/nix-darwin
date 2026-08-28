@@ -1,29 +1,17 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}:
+{ pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    # Client tools, not a local postgres service
     postgresql_18
 
-    # Go Toolchain
-    go
-    gopls
-    golangci-lint
-    gotools
-    delve
-    go-outline
-    # for cgo support
+    # cgo / confluent kafka client
     pkg-config
-    # for confluent kakfa client library
     rdkafka
 
     # Docs
     openapi-generator-cli
 
-    # Ops tools
+    # Ops tools (opentofu rather than terraform, unlike the personal host)
     openstackclient
     kubernetes-helm
     kubectl
@@ -40,14 +28,10 @@
     nodejs
     yarn
     playwright-test
-
-    gnumake
-    python3
-    podman
-    podman-compose
   ];
+
   homebrew.casks = [
-    "luanti"
     "google-chrome"
+    "luanti"
   ];
 }

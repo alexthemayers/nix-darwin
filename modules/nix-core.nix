@@ -1,40 +1,20 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ lib, ... }:
 {
   nix = {
-    # NOTE: Turning off this option will invalidate all of the following nix configurations,
-    # and you will need to manually modify /etc/nix/nix.custom.conf to add the corresponding parameters.
+    # If this is false, the settings below are ignored; edit /etc/nix/nix.custom.conf instead.
     enable = true;
 
-    package = pkgs.nix;
-
     settings = {
-      # enable flakes globally
       experimental-features = [
         "nix-command"
         "flakes"
       ];
 
-      # substituers that will be considered before the official ones(https://cache.nixos.org)
-      substituters = [
-        #        "https://mirror.sjtu.edu.cn/nix-channels/store"
-        #        "https://nix-community.cachix.org"
-      ];
-      trusted-public-keys = [
-        #        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
-      builders-use-substitutes = true;
-
-      # Disable auto-optimise-store because of this issue:
-      #   https://github.com/NixOS/nix/issues/7273
-      # "error: cannot link '/nix/store/.tmp-link-xxxxx-xxxxx' to '/nix/store/.links/xxxx': File exists"
+      # Enabled despite NixOS/nix#7273 (store link races on Darwin). Revisit if
+      # builds fail with "cannot link ... File exists".
       auto-optimise-store = true;
     };
 
-    # do garbage collection weekly to keep disk usage low
     gc = {
       automatic = lib.mkDefault true;
       options = lib.mkDefault "--delete-older-than 7d";

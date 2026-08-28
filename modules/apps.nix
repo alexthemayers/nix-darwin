@@ -1,36 +1,20 @@
 {
   pkgs,
-  config,
   lib,
   ...
 }:
 {
-  ##########################################################################
-  #
-  #  Install all apps and packages here.
-  #
-  #  NOTE: Your can find all available options in:
-  #    https://daiderd.com/nix-darwin/manual/index.html
-  #
-  # TODO Feel free to modify this file to fit your needs.
-  #
-  ##########################################################################
-
-  # Install packages from nix's official package repository.
-  #
-  # The packages installed here are available to all users, and are reproducible across machines, and are rollbackable.
-  # But on macOS, it's less stable than homebrew.
-  #
-  # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
+  # Shared CLI from nixpkgs. GUI apps are mostly Homebrew: larger catalog on
+  # macOS, but not reproducible. See https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
     curl
-    direnv
     fastfetch
     git
     ghostty-bin
     jq
     neovim
     tree
+    # Negative prio beats BSD / GNU coreutils so `ls`, `date`, etc. are uutils.
     (lib.setPrio (-15) uutils-coreutils-noprefix)
     watch
     wget
@@ -40,27 +24,22 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
-  #
-  # The apps installed by homebrew are not managed by nix, and not reproducible!
-  # But on macOS, homebrew has a much larger selection of apps than nixpkgs, especially for GUI apps!
+
   homebrew = {
     enable = true;
 
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      # 'zap': uninstalls all formulae(and related files) not listed here.
+      # zap removes formulae/casks (and related files) not listed here, including
+      # apps installed by hand. Add every wanted cask below or it will vanish on switch.
       cleanup = "zap";
       # https://github.com/nix-darwin/nix-darwin/issues/1787
       extraFlags = [ "--force-cleanup" ];
     };
 
     taps = [ ];
-
-    # `brew install`
     brews = [ ];
-
-    # `brew install --cask`
     casks = [
       "alfred"
       "antigravity"
