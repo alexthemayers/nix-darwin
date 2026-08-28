@@ -11,6 +11,7 @@
     ssh-to-age
 
     postgresql_17
+    terraform
 
     iperf3
 
