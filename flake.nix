@@ -7,6 +7,11 @@
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Non-flake repo. Official skill list is .claude-plugin/plugin.json.
+    mattpocock-skills = {
+      url = "github:mattpocock/skills";
+      flake = false;
+    };
   };
 
   outputs =
@@ -26,6 +31,7 @@
         ./modules/apps.nix
         ./modules/host-users.nix
         ./modules/dev-tools.nix
+        ./modules/cursor-skills.nix
       ];
       mkDarwinHost =
         {
@@ -38,6 +44,8 @@
           inherit system modules;
           specialArgs = inputs // {
             inherit username hostname;
+            # Hyphenated input names are not valid module arguments.
+            mattpocockSkills = inputs.mattpocock-skills;
           };
         };
     in
